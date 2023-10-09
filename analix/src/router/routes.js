@@ -16,18 +16,29 @@ export default [
     ],
   },
   {
-    path: '/auth',
-    name: 'Auth',
-    component: () => import('@/layouts/AuthenticationLayout.vue'),
-    redirect: '/auth/login',
+    path: '/Productos',
+    component: () => import('@/layouts/DashboardLayout.vue'),
     children: [
       {
-        path: '/auth/login',
+        path: '/Productos',
+        name: 'Productos',
+        component: () => import('@/views/productos/Listado.vue'),
+      },
+    ],
+  },
+  {
+    path: '/Auth',
+    name: 'Auth',
+    component: () => import('@/layouts/AuthenticationLayout.vue'),
+    redirect: '/Auth/Login',
+    children: [
+      {
+        path: '/Auth/Login',
         name: 'Login',
         component: () => import('@/views/auth/Login.vue'),
       },
       {
-        path: '/auth/register',
+        path: '/Auth/Register',
         name: 'Register',
         component: () => import('@/views/auth/Register.vue'),
       },

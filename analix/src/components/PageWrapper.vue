@@ -15,7 +15,7 @@ defineProps({
     </header>
 
     <!-- Page Content -->
-    <main class="flex-1" :class="{ 'mt-6': !$slots.header }">
+    <main class="flex-1" :class="{ 'mt-0': !$slots.header }">
         <div class="grid gap-6 px-4 sm:px-6">
             <slot />
         </div>

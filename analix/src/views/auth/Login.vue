@@ -1,27 +1,9 @@
-<script setup>
-import { reactive } from 'vue'
-import InputIconWrapper from '@/components/InputIconWrapper.vue'
-import Label from '@/components/Label.vue'
-import Input from '@/components/Input.vue'
-import Checkbox from '@/components/Checkbox.vue'
-import Button from '@/components/Button.vue'
-
-const loginForm = reactive({
-    email: '',
-    password: '',
-    remember: false,
-    processing: false,
-})
-
-const login = () => {}
-</script>
-
 <template>
     <form @submit.prevent="login">
         <div class="grid gap-6">
             <!-- Email input -->
             <div class="space-y-2">
-                <Label for="email" value="Correo electrónico de la empressa" />
+                <Label for="email" value="Correo electrónico de la empresa" />
 
                 <InputIconWrapper icon="mdi:email-outline">
                     <Input
@@ -88,3 +70,46 @@ const login = () => {}
         </div>
     </form>
 </template>
+
+<script setup>
+import { reactive } from 'vue'
+import InputIconWrapper from '@/components/InputIconWrapper.vue'
+import Label from '@/components/Label.vue'
+import Input from '@/components/Input.vue'
+import Checkbox from '@/components/Checkbox.vue'
+import Button from '@/components/Button.vue'
+import supabase from '@/supabaseClient'
+import { push } from '@/main'
+import router from '@/router'
+
+const loginForm = reactive({
+    email: '',
+    password: '',
+    remember: false,
+    processing: false,
+})
+
+
+const login = async () => {
+    try {
+        const { data, error } = await supabase.auth.signInWithPassword({
+            email: loginForm.email,
+            password: loginForm.password,
+        })
+        console.log(data, error);
+
+        if (error) {
+            push.warning("Credenciales inválidas")
+        }
+
+        else {
+            push.success("Inicio de sesión exitoso");
+            router.push('/');
+        }
+    }
+    catch (ex) {
+        console.log(ex);
+    }
+
+}
+</script>

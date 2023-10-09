@@ -30,17 +30,17 @@ const isCurrentPath = (path) => {
         <SidebarCollapsible
             icon="mdi:note-outline"
             title="Registro"
-            :active="isCurrentPath('/pages')"
+            :active="isCurrentPath('/Productos') || isCurrentPath('/Ventas')"
         >
             <SidebarCollapsibleItem
                 :to="{ name: 'Blank' }"
-                title="Venta"
+                title="Ventas"
                 :active="isCurrentRoute('Blank')"
             />
             <SidebarCollapsibleItem
-                :to="{ name: 'Blank' }"
-                title="Producto"
-                :active="isCurrentRoute('Blank')"
+                :to="{ name: 'Productos' }"
+                title="Productos"
+                :active="isCurrentRoute('Productos')"
             />
         </SidebarCollapsible>
 

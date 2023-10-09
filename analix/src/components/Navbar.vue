@@ -14,6 +14,9 @@
     import Dropdown from '@/components/Dropdown.vue'
     import DropdownLink from '@/components/DropdownLink.vue'
     import userAvatar from '@/assets/images/avatar.jpg'
+    import supabase from '@/supabaseClient'
+    import { push } from '@/main'
+    import router from '@/router'
 
     const { isFullscreen, toggle: toggleFullScreen } = useFullscreen()
 
@@ -24,6 +27,19 @@
     onUnmounted(() => {
         document.removeEventListener('scroll', handleScroll)
     })
+
+    async function LogOut() {
+        const { error } = await supabase.auth.signOut()
+
+        if (error) {
+            push.error("Error. Intentelo nuevamente")
+        }
+
+        else {
+            push.success("Cierre de sesión exitoso")
+        }
+    }
+
 </script>
 
 <template>
@@ -81,7 +97,7 @@
                     </button>
                 </template>
                 <template #content>
-                    <DropdownLink :to="{ name: 'Login' }">Log Out</DropdownLink>
+                    <DropdownLink :to="{ name: 'Login' }" @click="LogOut()">Cerrar sesión</DropdownLink>
                 </template>
             </Dropdown>
         </div>
@@ -99,7 +115,7 @@
 
         <router-link :to="{ name: 'Dashboard' }">
             <Logo class="w-10 h-10" />
-            <span class="sr-only">K UI</span>
+            <span class="sr-only">Analix</span>
         </router-link>
 
         <Button iconOnly

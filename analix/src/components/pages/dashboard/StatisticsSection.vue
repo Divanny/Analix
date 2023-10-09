@@ -13,13 +13,19 @@ const growthData = [4, 3, 10, 9, 29, 19, 22, 9, 12, 7, 19, 5, 13]
 
         <!-- Customers card -->
         <QuiclStatisticsCard
-            title="Customers"
-            :chartData="customersData"
-            result="12.4k"
+            title="Ordenes"
+            :chartData="{
+                data: [120, 150, 180, 200, 170, 190, 220],
+                categories: ['1/11/2023', '2/11/2023', '3/11/2023', '4/11/2023', '5/11/2023', '6/11/2023', '7/11/2023']
+
+            }"
+            
+            result="220k"
             percentage="32.40%"
             :actions="[{ title: 'View', to: '#' }]"
-            icon="mdi:account-group-outline"
+            icon="mdi:cart-outline"
         />
+
 
         <!-- Visits card -->
         <QuiclStatisticsCard

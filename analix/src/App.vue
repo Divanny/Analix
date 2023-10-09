@@ -1,7 +1,8 @@
 <script setup>
 import { onMounted } from 'vue'
 import { gsap } from 'gsap'
-
+import { Notivue, Notifications, NotivueSwipe, darkTheme, pastelTheme } from 'notivue'
+import { isDark } from '@/composables'
 onMounted(() => {
     gsap.to('#loading .logo', { y: -50, opacity: 0, duration: 0.5 })
     gsap.to('#loading .left', {
@@ -20,8 +21,15 @@ onMounted(() => {
         },
     })
 })
+
 </script>
 
 <template>
+    <Notivue v-slot="item">
+        <NotivueSwipe :item="item">
+            <Notifications :item="item" :theme="((isDark) ? darkTheme : pastelTheme)" />
+        </NotivueSwipe>
+    </Notivue>
+    <ConfirmPopup></ConfirmPopup>
     <router-view />
 </template>
