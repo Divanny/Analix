@@ -30,6 +30,6 @@ onMounted(() => {
             <Notifications :item="item" :theme="((isDark) ? darkTheme : pastelTheme)" />
         </NotivueSwipe>
     </Notivue>
-    <ConfirmPopup></ConfirmPopup>
+    <DialogsWrapper />
     <router-view />
 </template>

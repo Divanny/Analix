@@ -67,6 +67,16 @@
                     <span>Iniciar sesión</span>
                 </Button>
             </div>
+
+            <p class="text-sm text-gray-600 dark:text-gray-400">
+                ¿No te has registrado?
+                <router-link
+                    :to="{ name: 'Registro' }"
+                    class="text-blue-500 hover:underline"
+                >
+                    Registrarse
+                </router-link>
+            </p>
         </div>
     </form>
 </template>

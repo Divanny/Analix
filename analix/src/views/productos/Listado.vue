@@ -61,7 +61,7 @@
                     <tbody>
                         <tr
                             v-for="product, index in products"
-                            :class="'bg-white dark:bg-gray-800 dark:border-gray-700', 'border-b'"
+                            :class="'bg-white dark:bg-gray-800 dark:border-gray-700 border-b', 'border-b'"
                         >
                             <td class="px-6 py-4">
                                 {{ index + 1 }}
@@ -87,18 +87,14 @@
                                     >
                                     <i class="fa-solid fa-pen-to-square w-3.5 h-3.5"></i>
                                 </button>
-                                <Popconfirm title="Are you sure？">
-                                    <template #icon><question-circle-outlined style="color: red" /></template>
-                                    <button
-                                        @click="showConfirmeDelete = true"
-                                        class="flex items-center justify-center w-9 h-9 mx-1 text-xs font-medium text-gray-700 bg-white border border-gray-200 rounded-lg toggle-full-view focus:z-10 focus:ring-2 focus:ring-gray-300 dark:focus:ring-gray-500 dark:bg-gray-800 focus:outline-none text-red-500 dark:border-red-500 hover:text-white dark:hover:bg-red-600 hover:bg-red-600 hover:border-red-600 focus:ring-red-900"
+                                <button
+                                    @click="showConfirmDelete()"
+                                    class="flex items-center justify-center w-9 h-9 mx-1 text-xs font-medium text-gray-700 bg-white border border-gray-200 rounded-lg toggle-full-view focus:z-10 focus:ring-2 focus:ring-gray-300 dark:focus:ring-gray-500 dark:bg-gray-800 focus:outline-none text-red-500 dark:border-red-500 hover:text-white dark:hover:bg-red-600 hover:bg-red-600 hover:border-red-600 focus:ring-red-900"
+                                >
+                                    <span class="sr-only">Eliminar producto</span
                                     >
-                                        <span class="sr-only">Eliminar producto</span
-                                        >
-                                        <i class="fa-solid fa-trash-can w-3.5 h-3.5"></i>
-                                    </button>
-                                </Popconfirm>
-                                
+                                    <i class="fa-solid fa-trash-can w-3.5 h-3.5"></i>
+                                </button>                                
                             </td>
                         </tr>
                     </tbody>
@@ -183,21 +179,20 @@
 import PageWrapper from '@/components/PageWrapper.vue'
 import supabase from '@/supabaseClient'
 import { push } from '@/main'
-import { Popconfirm } from 'ant-design-vue';
+import useConfirmBeforeAction from "@/utils/useConfirmBeforeAction";
 
 export default {
     components: {
-        PageWrapper,
-        Popconfirm
+        PageWrapper
     },
     data() {
         return {
             loading: true,
-            showConfirmDelete: false,
             products: [],
             categories: [],
             totalRows: 0,
-            totalPages: 0
+            totalPages: 0,
+            isConfirmed: false
         }
     },
     mounted() {
@@ -205,6 +200,16 @@ export default {
         this.loadProducts()
     },
     methods: {
+        showConfirmDelete() {
+            useConfirmBeforeAction(
+                () => {
+                alert("confirmed");
+                },
+                {
+                question: "¿Estás seguro?",
+                }
+            );
+        },
         async loadCategories() {
             let { data: Categorias, error } = await supabase
                 .from('Categorias')

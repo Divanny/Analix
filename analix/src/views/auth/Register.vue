@@ -1,45 +1,6 @@
-<script setup>
-import { reactive } from 'vue'
-import InputIconWrapper from '@/components/InputIconWrapper.vue'
-import Label from '@/components/Label.vue'
-import Input from '@/components/Input.vue'
-import Checkbox from '@/components/Checkbox.vue'
-import Button from '@/components/Button.vue'
-
-const registerForm = reactive({
-    name: '',
-    email: '',
-    password: '',
-    password_confirmation: '',
-    terms: false,
-    processing: false,
-})
-
-const register = () => {}
-</script>
-
 <template>
     <form @submit.prevent="register">
         <div class="grid gap-6">
-            <!-- Name input -->
-            <div class="space-y-2">
-                <Label for="name" value="Name" />
-
-                <InputIconWrapper icon="mdi:account-outline">
-                    <Input
-                        withIcon
-                        id="name"
-                        type="text"
-                        placeholder="Name"
-                        class="block w-full"
-                        v-model="registerForm.name"
-                        required
-                        autofocus
-                        autocomplete="name"
-                    />
-                </InputIconWrapper>
-            </div>
-
             <!-- Email input -->
             <div class="space-y-2">
                 <Label for="email" value="Email" />
@@ -134,20 +95,64 @@ const register = () => {}
                     :disabled="registerForm.processing"
                     left-icon="mdi:account-plus-outline"
                 >
-                    <span>Register</span>
+                    <span>Registrarse</span>
                 </Button>
             </div>
 
             <!-- Login link -->
             <p class="text-sm text-gray-600 dark:text-gray-400">
-                Already have an account?
+                ¿Ya posees una cuenta?
                 <router-link
                     :to="{ name: 'Login' }"
                     class="text-blue-500 hover:underline"
                 >
-                    Login
+                    Iniciar sesión
                 </router-link>
             </p>
         </div>
     </form>
 </template>
+
+<script setup>
+import { reactive } from 'vue'
+import InputIconWrapper from '@/components/InputIconWrapper.vue'
+import Label from '@/components/Label.vue'
+import Input from '@/components/Input.vue'
+import Checkbox from '@/components/Checkbox.vue'
+import Button from '@/components/Button.vue'
+import supabase from '@/supabaseClient'
+import { push } from '@/main'
+import router from '@/router'
+
+const registerForm = reactive({
+    name: '',
+    email: '',
+    password: '',
+    password_confirmation: '',
+    terms: false,
+    processing: false,
+})
+
+const register = async () => {
+    try {
+        if (registerForm.password_confirmation != registerForm.password) push.warning("Las contraseñas no coinciden");
+
+        const { data, error } = await supabase.auth.signUp({
+            email: registerForm.email,
+            password: registerForm.password,
+        })
+
+        if (error) {
+            push.error("Error al registrar. Intentar de nuevo")
+        }
+
+        else {
+            push.info("Registro exitoso. Favor confirmar correo");
+            router.push('/Auth/ConfirmarCorreo');
+        }
+    }
+    catch (ex) {
+        console.log(ex);
+    }
+}
+</script>

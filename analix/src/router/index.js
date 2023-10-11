@@ -15,7 +15,7 @@ router.beforeEach(async (to) => {
 
   let authenticated = await isAuthenticated();
 
-  if (!authenticated && to.name != "Login") {
+  if (!authenticated && to.meta.requiresAuth) {
     push.info('La sesión ha expirado')
     return { name: "Login" };
   }
