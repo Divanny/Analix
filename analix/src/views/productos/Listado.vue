@@ -88,7 +88,7 @@
                                     <i class="fa-solid fa-pen-to-square w-3.5 h-3.5"></i>
                                 </button>
                                 <button
-                                    @click="showConfirmDelete()"
+                                    @click="showConfirmDelete( product.idProducto)"
                                     class="flex items-center justify-center w-9 h-9 mx-1 text-xs font-medium text-gray-700 bg-white border border-gray-200 rounded-lg toggle-full-view focus:z-10 focus:ring-2 focus:ring-gray-300 dark:focus:ring-gray-500 dark:bg-gray-800 focus:outline-none text-red-500 dark:border-red-500 hover:text-white dark:hover:bg-red-600 hover:bg-red-600 hover:border-red-600 focus:ring-red-900"
                                 >
                                     <span class="sr-only">Eliminar producto</span
@@ -200,13 +200,26 @@ export default {
         this.loadProducts()
     },
     methods: {
-        showConfirmDelete() {
+        async deleteProduct(idProducto) {
+            const { error } = await supabase
+                    .from('Productos')
+                    .delete()
+                    .eq('idProducto', idProducto);
+
+            if (error) {
+                push.error('Error al eliminar el producto')
+            } else {
+                push.success('Producto eliminado correctamente')
+                this.loadProducts()
+            }
+        },
+        showConfirmDelete(idProducto) {
             useConfirmBeforeAction(
                 () => {
-                alert("confirmed");
+                    this.deleteProduct(idProducto);
                 },
                 {
-                question: "¿Estás seguro?",
+                    question: "¿Estás seguro?",
                 }
             );
         },
