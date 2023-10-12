@@ -2,10 +2,11 @@ const defaultTheme = require('tailwindcss/defaultTheme')
 
 module.exports = {
   darkMode: 'class',
-  content:  [
-              './index.html', 
-              './src/**/*.{js,jsx,vue}'
-            ],
+  content:  ['./index.html', './src/**/*.{js,jsx,vue}', 'node_modules/flowbite/**/*.{js,jsx,ts,tsx}',  'node_modules/flowbite-vue/**/*.{js,jsx,ts,tsx}',
+],
+  plugins: [
+    require('flowbite/plugin')
+  ],
   theme: {
     extend: {
       fontFamily: {

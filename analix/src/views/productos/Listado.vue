@@ -81,6 +81,7 @@
                             <td class="px-6 py-4">${{ product.Precio.toLocaleString() }}</td>
                             <td class="px-6 py-4 flex items-center">
                                 <button
+                                    @click="showForm(product.idProducto)"
                                     class="flex items-center justify-center w-9 h-9 mx-1 text-xs font-medium text-gray-700 bg-white border border-gray-200 rounded-lg toggle-full-view hover:bg-gray-100 hover:text-teal-700 focus:z-10 focus:ring-2 focus:ring-gray-300 dark:focus:ring-gray-500 dark:bg-gray-800 focus:outline-none dark:text-gray-400 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700"
                                 >
                                     <span class="sr-only">Editar producto</span
@@ -88,7 +89,7 @@
                                     <i class="fa-solid fa-pen-to-square w-3.5 h-3.5"></i>
                                 </button>
                                 <button
-                                    @click="showConfirmDelete( product.idProducto)"
+                                    @click="showConfirmDelete(product.idProducto)"
                                     class="flex items-center justify-center w-9 h-9 mx-1 text-xs font-medium text-gray-700 bg-white border border-gray-200 rounded-lg toggle-full-view focus:z-10 focus:ring-2 focus:ring-gray-300 dark:focus:ring-gray-500 dark:bg-gray-800 focus:outline-none text-red-500 dark:border-red-500 hover:text-white dark:hover:bg-red-600 hover:bg-red-600 hover:border-red-600 focus:ring-red-900"
                                 >
                                     <span class="sr-only">Eliminar producto</span
@@ -171,11 +172,32 @@
                 </ul>
             </nav>
         </div>
-        
+        <Modal size="xl" v-if="showFormModal" @close="showFormModal = false">
+            <template #header>
+                <div class="flex items-center text-lg">
+                {{ isEditing ? 'Agregar producto' : 'Editar producto' }}
+                </div>
+            </template>
+            <template #body>
+                
+            </template>
+            <template #footer>
+                <div class="flex justify-between">
+                <button @click="showFormModal = false" type="button" class="text-gray-500 bg-white hover:bg-gray-100 focus:ring-4 focus:outline-none focus:ring-teal-300 rounded-lg border border-gray-200 text-sm font-medium px-5 py-2.5 hover:text-gray-900 focus:z-10 dark:bg-gray-700 dark:text-gray-300 dark:border-gray-500 dark:hover:text-white dark:hover:bg-gray-600 dark:focus:ring-gray-600">
+                    Cancelar
+                </button>
+                <button @click="saveProduct()" type="button" class="text-white transition-colors bg-teal-600 hover:bg-teal-700 focus:ring-4 focus:outline-none focus:ring-teal-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-teal-600 dark:hover:bg-teal-700 dark:focus:ring-teal-800">
+                    <i class="fa-solid fa-floppy-disk"></i>
+                    Guardar
+                </button>
+                </div>
+            </template>
+        </Modal>
     </PageWrapper>
 </template>
 
 <script>
+import { Modal } from 'flowbite-vue'
 import PageWrapper from '@/components/PageWrapper.vue'
 import supabase from '@/supabaseClient'
 import { push } from '@/main'
@@ -183,23 +205,45 @@ import useConfirmBeforeAction from "@/utils/useConfirmBeforeAction";
 
 export default {
     components: {
-        PageWrapper
+        PageWrapper,
+        Modal
     },
     data() {
         return {
             loading: true,
             products: [],
-            categories: [],
             totalRows: 0,
             totalPages: 0,
-            isConfirmed: false
+            showFormModal: false, 
+            isEditing: false,
         }
     },
     mounted() {
-        this.loadCategories()
         this.loadProducts()
     },
     methods: {
+        async loadProducts(filter = false) {
+            if (filter) {
+            }
+
+            else {
+                let { data: Productos, error } = await supabase.from('Productos')
+                .select(`
+                    *,
+                    Categorias (
+                        Nombre
+                    )
+                `)
+
+                if (error == null) {
+                    this.products = Productos;
+                    this.totalRows = this.products.length;
+                    this.totalPages = this.totalRows / 10;
+                } else {
+                    push.error('Error al cargar los productos')
+                }
+            }
+        },
         async deleteProduct(idProducto) {
             const { error } = await supabase
                     .from('Productos')
@@ -223,44 +267,9 @@ export default {
                 }
             );
         },
-        async loadCategories() {
-            let { data: Categorias, error } = await supabase
-                .from('Categorias')
-                .select('*')
-
-            if (error == null) {
-                this.categories = Categorias
-            } else {
-                push.error('Error al cargar las categorías')
-            }
-        },
-
-        async loadProducts(filter = false) {
-            if (filter) {
-                
-            }
-
-            else {
-                let { data: Productos, error } = await supabase.from('Productos')
-                .select(`
-                *,
-                Categorias (
-                    Nombre
-                )
-                `)
-
-                console.log(Productos, error)
-
-                if (error == null) {
-                    this.products = Productos;
-                    this.totalRows = this.products.length;
-                    this.totalPages = this.totalRows / 10;
-                } else {
-                    push.error('Error al cargar los productos')
-                }
-            }
-
-        },
+        showForm(id = null) {
+          this.showFormModal = true; 
+        }
     },
 }
 </script>
