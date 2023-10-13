@@ -18,6 +18,24 @@ export default [
     ],
   },
   {
+    path: '/Ventas',
+    component: () => import('@/layouts/DashboardLayout.vue'),
+    children: [
+      {
+        path: '/Ventas',
+        name: 'Ventas',
+        meta: { requiresAuth: true },
+        component: () => import('@/views/ventas/Listado.vue'),
+      },
+      {
+        path: '/Ventas/Formulario',
+        name: 'FormularioVentas',
+        meta: { requiresAuth: true },
+        component: () => import('@/views/ventas/Formulario.vue'),
+      },
+    ],
+  },
+  {
     path: '/Productos',
     component: () => import('@/layouts/DashboardLayout.vue'),
     children: [

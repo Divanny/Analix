@@ -33,9 +33,9 @@ const isCurrentPath = (path) => {
             :active="isCurrentPath('/Productos') || isCurrentPath('/Ventas')"
         >
             <SidebarCollapsibleItem
-                :to="{ name: 'Blank' }"
+                :to="{ name: 'Ventas' }"
                 title="Ventas"
-                :active="isCurrentRoute('Blank')"
+                :active="isCurrentRoute('Ventas') || isCurrentRoute('FormularioVentas')"
             />
             <SidebarCollapsibleItem
                 :to="{ name: 'Productos' }"
