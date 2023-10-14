@@ -161,7 +161,7 @@
                             </div>
 
                             <p class="text-sm font-medium text-white">
-                                Today's Sales
+                                Ventas de hoy
                             </p>
                         </div>
                     </BaseCard>

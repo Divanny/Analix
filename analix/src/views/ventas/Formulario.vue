@@ -6,6 +6,7 @@
                     <h2 class="text-xl font-semibold leading-tight">Formulario de Ventas</h2>
                     <div class="flex">
                         <button
+                            @click="$router.go(-1)"
                             class="inline-flex items-center font-medium text-sm px-3 mx-2 py-1.5 rounded-md transition-colors text-white bg-gray-600 shadow-lg hover:bg-gray-700"
                             type="button"
                         >
@@ -15,6 +16,7 @@
                             Volver
                         </button>
                         <button
+                            @click="saveVenta()"
                             class="inline-flex items-center font-medium text-sm px-3 py-1.5 rounded-md transition-colors text-white bg-teal-600 shadow-lg hover:bg-teal-700"
                             type="button"
                         >
@@ -51,9 +53,10 @@
                       type="button"
                     >
                       <div class="mr-1">
-                        <i class="fa-solid fa-plus" />
+                        <i v-if="isEditingProduct" class="fa-solid fa-save" />
+                        <i v-else class="fa-solid fa-plus" />
                       </div>
-                      Agregar
+                      {{ isEditingProduct ? 'Guardar' : 'Agregar' }}
                     </button>
                   </div>
                 </div>
@@ -100,6 +103,7 @@
                             </td>
                             <td class="px-6 py-4 flex items-center">
                                 <button
+                                    @click="editProduct(index)"
                                     class="flex items-center justify-center w-9 h-9 mx-1 text-xs font-medium text-gray-700 bg-white border border-gray-200 rounded-lg toggle-full-view hover:bg-gray-100 hover:text-teal-700 focus:z-10 focus:ring-2 focus:ring-gray-300 dark:focus:ring-gray-500 dark:bg-gray-800 focus:outline-none dark:text-gray-400 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700"
                                 >
                                     <span class="sr-only">Editar venta</span
@@ -159,6 +163,44 @@ export default {
                 push.error('Error al cargar los productos')
             }
         },
+        async saveVenta() {
+            var total = this.productsSelected.reduce((accumulator, product) => {
+                return accumulator + parseInt(product.Precio);
+            }, 0);
+
+            const { data, error } = await supabase
+            .from('Ventas')
+            .insert([
+                { FechaVenta: this.fechaVenta, Total: total },
+            ])
+            .select()
+
+            var venta = data;
+
+            if (error == null) {
+                var productsMapped = this.productsSelected.map(x => {
+                    return {
+                        idVenta: venta[0].idVenta,
+                        idProducto: x.idProducto,
+                        Cantidad: x.Cantidad,
+                        Precio: x.Precio,
+                    }
+                })
+
+                const { data, error } = await supabase
+                .from('VentaProductos')
+                .insert(productsMapped)
+                .select()
+
+                if (error == null) {
+                    push.success("Guardado satisfactoriamente");
+                    this.$router.go(-1);
+                }
+                else push.error('Error al cargar los productos')
+            } else {
+                push.error('Error al cargar los productos')
+            }
+        },
         saveProduct() {
             const productFiltered = this.products.filter(x => x.value == this.productModel.idProducto);
 
@@ -171,7 +213,7 @@ export default {
             }
 
             if (this.isEditingProduct) {
-
+                this.productsSelected[this.productModel.index] = this.productModel;
             }
             else {
                 this.productsSelected.push(this.productModel);
@@ -183,6 +225,11 @@ export default {
             }
 
             this.isEditingProduct = false;
+        },
+        editProduct(index) {
+            this.productModel = JSON.parse(JSON.stringify(this.productsSelected[index]));
+            this.productModel.index = index;
+            this.isEditingProduct = true;
         }
     }
 }
