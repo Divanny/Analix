@@ -780,7 +780,7 @@ anymatch@~3.1.2:
     normalize-path "^3.0.0"
     picomatch "^2.0.4"
 
-apexcharts@^3.35.3:
+apexcharts@^3.35.3, "apexcharts@> 3.0.0":
   version "3.35.3"
   resolved "https://registry.npmjs.org/apexcharts/-/apexcharts-3.35.3.tgz"
   integrity sha512-UDlxslJr3DG63I/SgoiivIu4lpP25GMaKFK8NvCHmTksTQshx4ng3oPPrYvdsBFOvD/ajPYIh/p7rNB0jq8vXg==
@@ -2065,7 +2065,7 @@ vue-types@^3.0.0:
   dependencies:
     is-plain-object "3.0.1"
 
-"vue@^2.0.0 || >=3.0.0", "vue@^2.6.0 || ^3.2.0", vue@^3.0.0, "vue@^3.0.0-0 || ^2.6.0", vue@^3.2.0, vue@^3.2.25, vue@^3.2.37, vue@^3.3.x, "vue@>= 3", vue@>=3, vue@>=3.0.3, vue@>=3.2.0, vue@3.3.4:
+"vue@^2.0.0 || >=3.0.0", "vue@^2.6.0 || ^3.2.0", vue@^3.0.0, "vue@^3.0.0-0 || ^2.6.0", vue@^3.2.0, vue@^3.2.25, vue@^3.2.37, vue@^3.3.x, "vue@> 3.0.0", "vue@>= 3", vue@>=3, vue@>=3.0.3, vue@>=3.2.0, vue@3.3.4:
   version "3.3.4"
   resolved "https://registry.npmjs.org/vue/-/vue-3.3.4.tgz"
   integrity sha512-VTyEYn3yvIeY1Py0WaYGZsXnz3y5UnGi62GjVEqvEGPl6nxbOrCXbVOTQWBEJUqAyTUk2uJ5JLVnYJ6ZzGbrSw==
@@ -2075,6 +2075,11 @@ vue-types@^3.0.0:
     "@vue/runtime-dom" "3.3.4"
     "@vue/server-renderer" "3.3.4"
     "@vue/shared" "3.3.4"
+
+vue3-apexcharts@^1.4.4:
+  version "1.4.4"
+  resolved "https://registry.npmjs.org/vue3-apexcharts/-/vue3-apexcharts-1.4.4.tgz"
+  integrity sha512-TH89uZrxGjaDvkaYAISvj8+k6Bf1rUKFillc8oJirs5XZEPiwM1ELKZQ786wz0rfPqkSHHny2lqqUCK7Rw+LcQ==
 
 vuejs-confirm-dialog@^0.5.1:
   version "0.5.1"
