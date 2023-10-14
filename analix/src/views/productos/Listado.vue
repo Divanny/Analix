@@ -62,11 +62,11 @@
                     </thead>
                     <tbody>
                         <tr
-                            v-for="product in products"
+                            v-for="product, index in products"
                             :class="'bg-white dark:bg-gray-800 dark:border-gray-700 border-b', 'border-b'"
                         >
                             <td class="px-6 py-4">
-                                {{ product.idProducto }}
+                                {{ index + 1 + start }}
                             </td>
                             <th
                                 scope="row"
@@ -390,6 +390,7 @@ export default {
 
             try {
                 if (this.product.idProducto != null && this.product.idProducto != 0) {
+                    console.log(1);
                     const { data, error } = await supabase
                     .from('Productos')
                     .update({ 
@@ -406,11 +407,11 @@ export default {
                     errorOperation = error;
                 }
                 else {
+                    console.log(2);
                     const { data, error } = await supabase
                     .from('Productos')
                     .insert([
                         { 
-                            idProducto: 0,
                             NombreProducto: this.product.NombreProducto, 
                             idCategoria: this.product.idCategoria,
                             Cantidad: this.product.Cantidad,
@@ -420,6 +421,7 @@ export default {
                     ])
                     .select();
 
+                    console.log(error);
                     dataOperation = data;
                     errorOperation = error;
                 }
